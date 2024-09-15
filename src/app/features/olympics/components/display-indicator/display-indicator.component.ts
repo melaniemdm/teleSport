@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-display-indicator',
@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './display-indicator.component.scss'
 })
 export class DisplayIndicatorComponent {
-
+  title = input.required<string>();
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-display-title',
@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './display-title.component.scss'
 })
 export class DisplayTitleComponent {
-
+  title = input.required<string>();
 }
