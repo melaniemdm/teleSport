@@ -9,4 +9,5 @@ import { Component, input } from '@angular/core';
 })
 export class DisplayIndicatorComponent {
   title = input.required<string>();
+  valueindicator = input.required<string>();
 }
