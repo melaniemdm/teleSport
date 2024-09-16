@@ -1,8 +1,11 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+
+<!DOCTYPE html>
 
 
-<app-display-title title="Medal per country"> </app-display-title>
-<app-display-indicator title="number of JOs"></app-display-indicator>
-<app-display-indicator title="number of countries"></app-display-indicator>
+<!-- <p>{{ (olympics$ | async)?.length }} data loaded</p> -->
+
+<div class="titleHome">
+<app-display-title title="Medal per country" > </app-display-title></div>
+<div class="value-home">
+<app-display-indicator title="Number of JOs"  valueindicator = "10"></app-display-indicator>
+<app-display-indicator title="Number of countries" valueindicator = "10"></app-display-indicator></div>
