@@ -30,20 +30,7 @@ export class OlympicService {
     );
   }
 
-
-  /**
-   * Retourne l'Observable qui diffuse la liste des olympiades.
-   * L'Observable est un BehaviorSubject, ce qui signifie que si vous vous y abonnez
-   * apres que la liste a t  charg e, vous recevrez immediatement la liste des olympiades.
-   * Si vous vous y abonnez avant que la liste ne soit charg e, vous recevrez la liste
-   * des olympiades lorsqu'elle sera disponible.
-   */
-
-  getOlympics() {
-    return this.olympics$.asObservable();
-  }
-
-  /**
+   /**
    * Retourne le nombre total d'olympiades uniques.
    * Si la liste des pays n'est pas encore chargée, retourne 0.
    * Sinon, extrait toutes les années de toutes les participations,

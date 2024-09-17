@@ -17,21 +17,19 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     // Utiliser `combineLatest` pour gérer plusieurs observables simultanément
     combineLatest([
-      this.olympicService.getOlympics(),
       this.olympicService.getTotalUniqueOlympics(),
       this.olympicService.getTotalCountries(),
     ])
     .pipe(
-      map(([olympics, totalUniqueOlympics, totalCountries]) => {
-        return { olympics, totalUniqueOlympics, totalCountries }; // Retourne les deux résultats
+      map(([ totalUniqueOlympics, totalCountries]) => {
+        return {  totalUniqueOlympics, totalCountries }; // Retourne les deux résultats
       })
     )
-    .subscribe(({ olympics, totalUniqueOlympics, totalCountries }) => {
-      this.olympics = olympics;
+    .subscribe(({  totalUniqueOlympics, totalCountries }) => {
+  
       this.totalUniqueOlympics = totalUniqueOlympics;
       this.totalCountries = totalCountries;
 
-      console.log('Olympics data:', this.olympics);
       console.log('Total unique Olympics:', this.totalUniqueOlympics);
       console.log('Total countries:', this.totalCountries);
     });
