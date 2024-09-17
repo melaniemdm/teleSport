@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 
-<!-- <p>country works!{{ countryId }}</p> -->
+<p>country works!{{ countryId }}</p>
 
-<app-display-title title="name of country"> </app-display-title>
+<app-display-title [title]="selectedCountry?.country || 'No country selected'"></app-display-title>
+
 <div class="value-country">
-<app-display-indicator title="Number of entries"  valueindicator="3"></app-display-indicator>
-<app-display-indicator title="Total number of medals"  valueindicator="5"></app-display-indicator>
-<app-display-indicator title="Total number of athletes"  valueindicator="32"></app-display-indicator></div>
+  <app-display-indicator
+    title="Number of entries"
+    [valueindicator]="selectedCountry?.totalEntries?.toString() || '0'">
+  </app-display-indicator>
 
+  <app-display-indicator
+    title="Total number of medals"
+    [valueindicator]="selectedCountry?.totalMedalsCount?.toString() || '0'">
+  </app-display-indicator>
 
+  <app-display-indicator
+    title="Total number of athletes"
+    [valueindicator]="selectedCountry?.totalAthleteCount?.toString() || '0'">
+  </app-display-indicator>
+</div>
