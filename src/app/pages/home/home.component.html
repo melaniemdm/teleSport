@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 
 
-<!-- <p>{{ (olympics$ | async)?.length }} data loaded</p> -->
 
 <div class="titleHome">
 <app-display-title title="Medal per country" > </app-display-title></div>
 <div class="value-home">
-<app-display-indicator title="Number of JOs"  valueindicator = "10"></app-display-indicator>
-<app-display-indicator title="Number of countries" valueindicator = "10"></app-display-indicator></div>
+<app-display-indicator title="Number of JOs" [valueindicator]="totalUniqueOlympics.toString()"></app-display-indicator>
+<app-display-indicator title="Number of countries" [valueindicator]="totalCountries.toString()"></app-display-indicator></div>

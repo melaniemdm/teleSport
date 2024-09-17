@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import {  combineLatest, map} from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -8,11 +8,32 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public olympics$: Observable<any> = of(null);
+  public olympics: any[] = []; 
+  public totalUniqueOlympics: number = 0;
+  public totalCountries: number = 0;
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
-    this.olympics$ = this.olympicService.getOlympics();
+    // Utiliser `combineLatest` pour gérer plusieurs observables simultanément
+    combineLatest([
+      this.olympicService.getOlympics(),
+      this.olympicService.getTotalUniqueOlympics(),
+      this.olympicService.getTotalCountries(),
+    ])
+    .pipe(
+      map(([olympics, totalUniqueOlympics, totalCountries]) => {
+        return { olympics, totalUniqueOlympics, totalCountries }; // Retourne les deux résultats
+      })
+    )
+    .subscribe(({ olympics, totalUniqueOlympics, totalCountries }) => {
+      this.olympics = olympics;
+      this.totalUniqueOlympics = totalUniqueOlympics;
+      this.totalCountries = totalCountries;
+
+      console.log('Olympics data:', this.olympics);
+      console.log('Total unique Olympics:', this.totalUniqueOlympics);
+      console.log('Total countries:', this.totalCountries);
+    });
   }
 }
