@@ -7,11 +7,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DisplayTitleComponent } from './features/olympics/components/display-title/display-title.component';
 import { DisplayIndicatorComponent } from './features/olympics/components/display-indicator/display-indicator.component';
-import { RouterModule } from '@angular/router';
+
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, NotFoundComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, DisplayTitleComponent, DisplayIndicatorComponent, RouterModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, DisplayTitleComponent, DisplayIndicatorComponent],
   providers: [],
   bootstrap: [AppComponent],
 })
