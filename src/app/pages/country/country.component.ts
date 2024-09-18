@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { DisplayTitleComponent } from "../../features/olympics/components/display-title/display-title.component";
 import { DisplayIndicatorComponent } from "../../features/olympics/components/display-indicator/display-indicator.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Country } from 'src/app/core/models/Country';
+import { CommonModule } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-country',
   standalone: true,
-  imports: [DisplayTitleComponent, DisplayIndicatorComponent],
+  imports: [DisplayTitleComponent, DisplayIndicatorComponent, RouterModule, CommonModule],
   templateUrl: './country.component.html',
   styleUrl: './country.component.scss'
 })

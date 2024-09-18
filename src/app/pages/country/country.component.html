@@ -2,7 +2,7 @@
 
 <p>country works!{{ countryId }}</p>
 
-<app-display-title [title]="selectedCountry?.country || 'No country selected'"></app-display-title>
+<a routerLink="/" name="home"><app-display-title [title]="selectedCountry?.country || 'No country selected'"></app-display-title></a>
 
 <div class="value-country">
   <app-display-indicator
