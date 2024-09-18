@@ -34,40 +34,30 @@ export class OlympicService {
     );
   }
 
-   /**
-   * Retourne le nombre total d'olympiades uniques.
-   * Si la liste des pays n'est pas encore chargée, retourne 0.
-   * Sinon, extrait toutes les années de toutes les participations,
-   * utilise un Set pour avoir les années uniques, et retourne le nombre d'années uniques.
-   */
+  /** Returns the number of unique Olympiads (or 0 if the list of countries is empty) using a Set for years of participation. */
 
   getTotalUniqueOlympics(): Observable<number> {
     return this.olympics$.pipe(
       map((olympics: Olympics[] | null) => {
         if (!olympics) {
-          return 0; // Retourne 0 si aucune donnée
+          return 0; // Return 0 if no data
         }
 
-        // Extraire toutes les années de toutes les participations
+        // Extract all years from all participations
         const allYears = olympics.flatMap((country: Olympics) =>
           country.participations.map((participation: Participation) => participation.year)
         );
         console.log(allYears);
-        // Utiliser un Set pour avoir les années uniques
+        // Use a Set to have unique years
         const uniqueYears = new Set(allYears);
 
-        // Retourner le nombre d'années uniques
+        // Return the number of unique years
         return uniqueYears.size;
       })
     );
   }
 
-  /**
-   * Retourne le nombre total de pays.
-   * Si la liste des pays n'est pas encore chargée, retourne 0.
-   * Sinon, retourne le nombre de pays (chaque objet dans olympics représente un pays).
-   */
-
+/** Returns the number of countries (or 0 if the list is not loaded), with each object in olympics representing a country. */
   getTotalCountries(): Observable<number> {
     return this.olympics$.pipe(
       map((olympics: Olympics[] | null) => {
@@ -75,24 +65,13 @@ export class OlympicService {
           return 0;
         }
 
-        // Retourner le nombre de pays (chaque objet dans olympics représente un pays)
+      // Return the number of countries (each object in olympics represents a country)
         return olympics.length;
       })
     );
   }
 
-  /**
-   * Retourne une liste de pays avec des informations sur leurs participations
-   * aux JO. Si la liste des pays n'est pas encore chargée, retourne une liste
-   * vide.
-   * Sinon, retourne une liste de pays avec les informations suivantes :
-   * - id : l'identifiant du pays
-   * - country : le nom du pays
-   * - totalEntries : le nombre total de participations du pays
-   * - totalMedalsCount : le nombre total de médailles remportées par le pays
-   * - totalAthleteCount : le nombre total d'athlètes qui ont participé pour le
-   *   pays
-   */
+/** Returns a list of countries with their Olympic participations (or an empty list if not loaded) including id, name, participations, medals, and athletes. */
 
   getOlympicsPerCountry(): Observable<Country[]> {
     return this.olympics$.pipe(
@@ -101,7 +80,7 @@ export class OlympicService {
           return [];
         }
 
-        // Transformer les données en Country
+        // Transform data into Country
         return olympics.map((country: Olympics) => {
           const totalMedalsCount = country.participations.reduce(
             (sum, participation) => sum + participation.medalsCount, 0
@@ -112,24 +91,21 @@ export class OlympicService {
 
           return {
             id: country.id,
-            country: country.country, // Nom du pays correct
-            totalEntries: country.participations.length, // Nombre total de participations
-            totalMedalsCount: totalMedalsCount, // Total des médailles
-            totalAthleteCount: totalAthleteCount, // Total des athlètes
+            country: country.country, 
+            totalEntries: country.participations.length, 
+            totalMedalsCount: totalMedalsCount, 
+            totalAthleteCount: totalAthleteCount, 
           };
         });
       })
     );
   }
-  /**
-     * Retourne les données d'un pays spécifique par son ID.
-     * Cette méthode filtre les données pour renvoyer les informations
-     * d'un seul pays.
-     */
+  
+  /** Returns data for a specific country filtered by its ID. */
   getOlympicsForCountry(countryId: string): Observable<Country | undefined> {
     return this.getOlympicsPerCountry().pipe(
       map((countries: Country[]) => {
-        // Filtrer pour trouver les données du pays correspondant à l'ID
+        // Filter to find country data corresponding to the ID
         return countries.find(country => country.id.toString() === countryId);
       })
     );

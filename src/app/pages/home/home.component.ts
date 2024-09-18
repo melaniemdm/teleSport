@@ -15,14 +15,14 @@ export class HomeComponent implements OnInit {
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
-    // Utiliser `combineLatest` pour gérer plusieurs observables simultanément
+    // Use `combineLatest` to manage multiple observables simultaneously
     combineLatest([
       this.olympicService.getTotalUniqueOlympics(),
       this.olympicService.getTotalCountries(),
     ])
     .pipe(
       map(([ totalUniqueOlympics, totalCountries]) => {
-        return {  totalUniqueOlympics, totalCountries }; // Retourne les deux résultats
+        return {  totalUniqueOlympics, totalCountries }; // Return both results
       })
     )
     .subscribe(({  totalUniqueOlympics, totalCountries }) => {

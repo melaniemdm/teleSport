@@ -26,12 +26,10 @@ export class CountryComponent {
     console.log(this.countryId);
 
     if (this.countryId) {
-      // Utiliser le service pour obtenir les données du pays sélectionné
-      // console.log(this.olympicService.getOlympicsForCountry(this.countryId).subscribe((countryData: Country | undefined)=>{console.log(countryData)}));
-      // console.log(this.olympicService.getOlympicsForCountry(this.countryId));
+      // Use the service to get data for the selected country
       this.olympicService.getOlympicsForCountry(this.countryId).subscribe((countryData: Country | undefined) => {
         if (countryData) {
-          // Assigner l'objet complet à `selectedCountry`
+          // Assign the complete object to `selectedCountry`
           this.selectedCountry = countryData;
         }
       });
