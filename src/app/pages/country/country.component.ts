@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { DisplayTitleComponent } from "../../features/olympics/components/display-title/display-title.component";
 import { DisplayIndicatorComponent } from "../../features/olympics/components/display-indicator/display-indicator.component";
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Country } from 'src/app/core/models/Country';
 import { CommonModule } from '@angular/common';
@@ -20,13 +20,21 @@ export class CountryComponent {
   public selectedCountry: Country | null = null;
 
 
-  constructor(private route: ActivatedRoute, private olympicService: OlympicService) { }
+  constructor(private route: ActivatedRoute, private olympicService: OlympicService, private router: Router) { }
   ngOnInit(): void {
     //  Get country ID from URL
     this.countryId = this.route.snapshot.paramMap.get('countryId');
     console.log(this.countryId);
 
     if (this.countryId) {
+      this.olympicService.isIdExist(this.countryId).subscribe((isExist: boolean) => {
+        if (isExist) {
+         
+          this.router.navigate(['country/'+this.countryId]);
+        } else {
+          this.router.navigate(['not-found']);
+        }
+      })
       // Use the service to get data for the selected country
       this.olympicService.getOlympicsForCountry(this.countryId).subscribe((countryData: Country | undefined) => {
         if (countryData) {

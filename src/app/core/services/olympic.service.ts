@@ -111,4 +111,12 @@ export class OlympicService {
     );
   }
 
+  isIdExist(countryId: string): Observable<boolean> {
+    return this.getOlympicsPerCountry().pipe(
+      map((countries: Country[]) => {
+        // Filter to find country data corresponding to the ID
+        return countries.some(country => country.id.toString() === countryId);
+      })
+    );  
+  }
 }

@@ -16,6 +16,11 @@ const routes: Routes = [
     path: '**', // wildcard
     component: NotFoundComponent,
   },
+  { path: 'not-found', component: NotFoundComponent 
+    
+  },  
+  // Page Not Found
+  { path: '**', redirectTo: 'not-found' }
 ];
 
 @NgModule({
