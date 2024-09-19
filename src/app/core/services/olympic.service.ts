@@ -15,7 +15,7 @@ export class OlympicService {
   private olympics$ = new BehaviorSubject<any>(undefined);
   public Country: Country[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   loadInitialData() {
     return this.getOlympics();
@@ -57,7 +57,7 @@ export class OlympicService {
     );
   }
 
-/** Returns the number of countries (or 0 if the list is not loaded), with each object in olympics representing a country. */
+  /** Returns the number of countries (or 0 if the list is not loaded), with each object in olympics representing a country. */
   getTotalCountries(): Observable<number> {
     return this.olympics$.pipe(
       map((olympics: Olympics[] | null) => {
@@ -65,13 +65,13 @@ export class OlympicService {
           return 0;
         }
 
-      // Return the number of countries (each object in olympics represents a country)
+        // Return the number of countries (each object in olympics represents a country)
         return olympics.length;
       })
     );
   }
 
-/** Returns a list of countries with their Olympic participations (or an empty list if not loaded) including id, name, participations, medals, and athletes. */
+  /** Returns a list of countries with their Olympic participations (or an empty list if not loaded) including id, name, participations, medals, and athletes. */
 
   getOlympicsPerCountry(): Observable<Country[]> {
     return this.olympics$.pipe(
@@ -91,16 +91,16 @@ export class OlympicService {
 
           return {
             id: country.id,
-            country: country.country, 
-            totalEntries: country.participations.length, 
-            totalMedalsCount: totalMedalsCount, 
-            totalAthleteCount: totalAthleteCount, 
+            country: country.country,
+            totalEntries: country.participations.length,
+            totalMedalsCount: totalMedalsCount,
+            totalAthleteCount: totalAthleteCount,
           };
         });
       })
     );
   }
-  
+
   /** Returns data for a specific country filtered by its ID. */
   getOlympicsForCountry(countryId: string): Observable<Country | undefined> {
     return this.getOlympicsPerCountry().pipe(
@@ -111,12 +111,27 @@ export class OlympicService {
     );
   }
 
-  isIdExist(countryId: string): Observable<boolean> {
+
+  /**
+   * Returns an observable that emits a boolean indicating whether the country with the given id exists in the list of countries.
+   * If the list of countries is not loaded, the observable will emit false.
+   * @param countryId The id of the country to check
+   * @returns An observable that emits a boolean indicating whether the country exists
+   */
+
+  isIdMissing(countryId: string): Observable<boolean> {
+    
     return this.getOlympicsPerCountry().pipe(
       map((countries: Country[]) => {
-        // Filter to find country data corresponding to the ID
-        return countries.some(country => country.id.toString() === countryId);
+        console.log(countries)
+        if (countries.length > 0) {
+          // Filter to find country data corresponding to the ID. Return false if found
+          const isIdExist: boolean = countries.some(country => country.id.toString() === countryId); // corrected to boolean
+          console.log(isIdExist);
+          return !isIdExist;
+        }
+        return false;
       })
-    );  
+    );
   }
 }

@@ -27,11 +27,8 @@ export class CountryComponent {
     console.log(this.countryId);
 
     if (this.countryId) {
-      this.olympicService.isIdExist(this.countryId).subscribe((isExist: boolean) => {
-        if (isExist) {
-         
-          this.router.navigate(['country/'+this.countryId]);
-        } else {
+      this.olympicService.isIdMissing(this.countryId).subscribe((isMissing: boolean) => {
+        if (isMissing) {
           this.router.navigate(['not-found']);
         }
       })
@@ -40,6 +37,7 @@ export class CountryComponent {
         if (countryData) {
           // Assign the complete object to `selectedCountry`
           this.selectedCountry = countryData;
+          console.log(countryData)
         }
       });
     }
