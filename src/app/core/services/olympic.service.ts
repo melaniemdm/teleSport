@@ -96,6 +96,7 @@ export class OlympicService {
             totalEntries: country.participations.length, 
             totalMedalsCount: totalMedalsCount, 
             totalAthleteCount: totalAthleteCount, 
+            participations : country.participations
           };
         });
       })

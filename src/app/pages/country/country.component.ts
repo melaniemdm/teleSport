@@ -5,20 +5,22 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Country } from 'src/app/core/models/Country';
 import { CommonModule } from '@angular/common';
+import { ParticipationMedalsGraphComponent } from "../../features/olympics/components/participation-medals-graph/participation-medals-graph.component";
+import { Participation } from 'src/app/core/models/Participation';
 
 
 
 @Component({
   selector: 'app-country',
   standalone: true,
-  imports: [DisplayTitleComponent, DisplayIndicatorComponent, RouterModule, CommonModule],
+  imports: [DisplayTitleComponent, DisplayIndicatorComponent, RouterModule, CommonModule, ParticipationMedalsGraphComponent],
   templateUrl: './country.component.html',
   styleUrl: './country.component.scss'
 })
 export class CountryComponent {
   public countryId: string | null = null;  // stores country id
   public selectedCountry: Country | null = null;
-
+  public participations: Participation[] = []
 
   constructor(private route: ActivatedRoute, private olympicService: OlympicService, private router: Router) { }
   ngOnInit(): void {
@@ -40,7 +42,10 @@ export class CountryComponent {
         if (countryData) {
           // Assign the complete object to `selectedCountry`
           this.selectedCountry = countryData;
+          console.log(this.selectedCountry);
+          this.participations= this.selectedCountry.participations;
         }
+
       });
     }
   }
