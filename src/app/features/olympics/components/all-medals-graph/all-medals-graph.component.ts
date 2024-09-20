@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import {EChartsOption} from 'echarts';
+import { Router } from '@angular/router';
+import { EChartsOption } from 'echarts';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import { CountryMedals } from 'src/app/core/models/CountryMedals';
 
@@ -16,10 +17,13 @@ import { CountryMedals } from 'src/app/core/models/CountryMedals';
   ]
 })
 export class AllMedalsGraphComponent {
-   chartOption: EChartsOption = {}
-   @Input({ required: true }) countriesMedals: CountryMedals[] = [];
-  
-  constructor() {}
+  chartOption: EChartsOption = {}
+  @Input({ required: true }) countriesMedals: CountryMedals[] = [];
+  onChartEvent(event: any, type: string) {
+    console.log('chart event:', type, event.data.id);
+    this.router.navigate(['country/'+event.data.id]);
+  }
+  constructor(private router: Router) { }
 
 
   /**
@@ -27,9 +31,10 @@ export class AllMedalsGraphComponent {
    * Set the chart data
    */
 
-ngOnInit(): void {
- 
+  ngOnInit(): void {
+
     this.chartOption = {
+      
       tooltip: {
         trigger: 'item',
         formatter: '{b} <br/> {c} ',
@@ -39,12 +44,13 @@ ngOnInit(): void {
         {
           name: 'Médaille par Pays',
           type: 'pie',
-          data: this.countriesMedals, 
+          data: this.countriesMedals,
         },
       ],
     };
-  
-}
+
+  }
+ 
 }
 
 

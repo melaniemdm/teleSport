@@ -1,5 +1,6 @@
 
 <!DOCTYPE html>
-<p class="titi">all-medals-graph works!</p> 
 
-<div echarts [options]="chartOption" class="demo-chart"></div>
+
+<p>all-medals-graph works!</p>
+<div echarts [options]="chartOption" class="demo-chart" (chartClick)="onChartEvent($event, 'chartClick')"></div>
