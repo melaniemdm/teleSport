@@ -7,11 +7,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DisplayTitleComponent } from './features/olympics/components/display-title/display-title.component';
 import { DisplayIndicatorComponent } from './features/olympics/components/display-indicator/display-indicator.component';
+import { AllMedalsGraphComponent } from "./features/olympics/components/all-medals-graph/all-medals-graph.component";
+
 
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, NotFoundComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, DisplayTitleComponent, DisplayIndicatorComponent],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, DisplayTitleComponent, DisplayIndicatorComponent, AllMedalsGraphComponent],
   providers: [],
   bootstrap: [AppComponent],
 })

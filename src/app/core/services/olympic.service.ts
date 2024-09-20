@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Olympics } from '../models/Olympic';
 import { Participation } from '../models/Participation';
 import { Country } from '../models/Country';
+import { CountryMedals } from '../models/CountryMedals';
 
 
 @Injectable({
@@ -119,4 +120,36 @@ export class OlympicService {
       })
     );  
   }
+
+
+  /**
+   * Returns an array of objects with country id, name and total medals count.
+   * The data is retrieved from the olympics$ observable and transformed
+   * to create the CountryMedals objects.
+   */
+  getAllCountryMedals(): Observable<CountryMedals[]> {
+    return this.olympics$.pipe(
+      map((olympics: Olympics[] | null) => {
+        if (!olympics) {
+          return []; 
+        }
+  
+        // Transform the data to get the country name and medal total
+        return olympics.map((country: Olympics) => {
+          const totalMedals = country.participations.reduce(
+            (sum, participation) => sum + participation.medalsCount,
+            0
+          );
+  
+          return {
+            id: country.id,
+            name: country.country, 
+            value: totalMedals,    
+          };
+        });
+      })
+    );
+  }
+
 }
+

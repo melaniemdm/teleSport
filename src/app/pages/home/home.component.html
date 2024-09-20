@@ -8,3 +8,6 @@
 <div class="value-home">
 <app-display-indicator title="Number of JOs" [valueindicator]="totalUniqueOlympics.toString()"></app-display-indicator>
 <app-display-indicator title="Number of countries" [valueindicator]="totalCountries.toString()"></app-display-indicator></div>
+
+@if (countriesMedals.length > 0) {
+<app-all-medals-graph [countriesMedals]="countriesMedals" ></app-all-medals-graph>}
