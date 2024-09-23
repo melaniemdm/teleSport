@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Olympics } from '../models/Olympic';
 import { Participation } from '../models/Participation';
@@ -13,27 +13,26 @@ import { CountryMedals } from '../models/CountryMedals';
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+  private olympics$ = new BehaviorSubject<Olympics[] | null>(null);
   public Country: Country[] = [];
 
   constructor(private http: HttpClient) {}
 
   loadInitialData() {
-    return this.getOlympics();
+      return this.getOlympics();
   }
 
-  private getOlympics() {
-    return this.http.get<any>(this.olympicUrl).pipe(
+  private getOlympics(): Observable<Olympics[] | null> {
+    return this.http.get<Olympics[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
-      catchError((error, caught) => {
-        // improve error handling
+      catchError((error) => {
         console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
         this.olympics$.next(null);
-        return caught;
+        return throwError(() => error); // Renvoie une erreur Observable proprement
       })
     );
   }
+
 
   /** Returns the number of unique Olympiads (or 0 if the list of countries is empty) using a Set for years of participation. */
 
@@ -48,7 +47,7 @@ export class OlympicService {
         const allYears = olympics.flatMap((country: Olympics) =>
           country.participations.map((participation: Participation) => participation.year)
         );
-        console.log(allYears);
+        //console.log(allYears);
         // Use a Set to have unique years
         const uniqueYears = new Set(allYears);
 

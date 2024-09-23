@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {  combineLatest, map} from 'rxjs';
+import {  combineLatest, map, Subscription} from 'rxjs';
 import { CountryMedals } from 'src/app/core/models/CountryMedals';
+import { Olympics } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -9,17 +10,20 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 
 })
+
 export class HomeComponent implements OnInit {
-  public olympics: any[] = []; 
+  public olympics: Olympics[] | null = null;
   public totalUniqueOlympics: number = 0;
   public totalCountries: number = 0;
   public countriesMedals: CountryMedals[] = []
+
+  private subscription: Subscription = new Subscription();
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
     // Use `combineLatest` to manage multiple observables simultaneously
-    combineLatest([
+    const combinedSubscription = combineLatest([
       this.olympicService.getTotalUniqueOlympics(),
       this.olympicService.getTotalCountries(),
       this.olympicService.getAllCountryMedals(),
@@ -34,11 +38,16 @@ export class HomeComponent implements OnInit {
       this.totalUniqueOlympics = totalUniqueOlympics;
       this.totalCountries = totalCountries;
 
-      console.log('tableau des countries:', this.countriesMedals)
-      console.log('Total unique Olympics:', this.totalUniqueOlympics);
-      console.log('Total countries:', this.totalCountries);
+      //console.log('tableau des countries:', this.countriesMedals)
+     // console.log('Total unique Olympics:', this.totalUniqueOlympics);
+     // console.log('Total countries:', this.totalCountries);
     });
+    this.subscription.add(combinedSubscription);
+  }
+  ngOnDestroy(): void {
+    // Désabonnement de l'abonnement pour éviter les fuites de mémoire
+    this.subscription.unsubscribe();
+    console.log('UNSUBSCRIPTION DONE ');
     
   }
-  
 }
