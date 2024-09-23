@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<p>country works!{{ countryId }}</p>
+<!-- <p>{{ countryId }}</p> -->
 
 <a routerLink="/" name="home"><app-display-title [title]="selectedCountry?.country || 'No country selected'"></app-display-title></a>
 
@@ -21,3 +21,5 @@
   </app-display-indicator>
 </div>
 <app-participation-medals-graph [participations]="participations"></app-participation-medals-graph>
+
+<button class="backButton" title="Back to home" routerLink="/">Home</button>
