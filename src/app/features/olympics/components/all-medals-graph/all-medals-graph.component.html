@@ -1,4 +1,6 @@
 <!DOCTYPE html>
 
-   <div echarts [options]="chartOption" class="demo-chart " (chartClick)="onChartEvent($event, 'chartClick')"></div>
-
+<div #chartContainer class="chart-container">
+   <div echarts [options]="chartOption" class="demo-chart" (chartClick)="onChartEvent($event, 'chartClick')" ></div>
+ </div>
+ 

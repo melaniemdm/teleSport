@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { EChartsOption, ECharts } from 'echarts';
+import { EChartsOption } from 'echarts';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import { CountryMedals } from 'src/app/core/models/CountryMedals';
 
@@ -17,21 +17,14 @@ import { CountryMedals } from 'src/app/core/models/CountryMedals';
   ]
 })
 export class AllMedalsGraphComponent {
-  chartOption: EChartsOption = {}
   @Input({ required: true }) countriesMedals: CountryMedals[] = [];
-  private chartInstance: ECharts | null = null;
- private resizeObserver: ResizeObserver | null = null; // Déclare correctement resizeObserver
+ 
+  chartOption: EChartsOption = {}
   
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-
-  /**
-   * Initialization of the component
-   * Set the chart data
-   */
 
   ngOnInit(): void {
-
     this.chartOption = {
       responsive: true,
       // Configuration de la couleur de la série
@@ -58,61 +51,69 @@ export class AllMedalsGraphComponent {
           data: this.countriesMedals,
           label: {
             show: true,
-            fontSize: 25,
-          }
-        },
+            fontSize: 20,
+          },
         
+        },
+
       ],
       media: [
         {
-          query: {
-            maxWidth: 500, // Pour les écrans de moins de 500px de large (smartphones)
-          },
+          query: { maxWidth: 500 },
           option: {
-            series: [
-              {
-                radius: ['0%', '50%'],
-                label: {
-                  fontSize: 12, // Réduction de la taille des labels sur mobile
-                },
-              },
-            ],
-            tooltip: {
-              padding: [5, 5],
-              textStyle: {
-                fontSize: 12, // Réduire la taille du texte de l'info-bulle sur mobile
-              },
-            },
+            series: [{ radius: ['0%', '50%'], label: { fontSize: 12 } }],
+            tooltip: { padding: [5, 5], textStyle: { fontSize: 12 } },
           },
         },
         {
-          query: {
-            minWidth: 501, // Pour les écrans plus grands (tablettes, desktop)
-          },
+          query: { minWidth: 501 },
           option: {
-            series: [
-              {
-                label: {
-                  fontSize: 20, // Ajustement de la taille des labels pour des écrans plus grands
-                },
-              },
-            ],
-            tooltip: {
-              textStyle: {
-                fontSize: 20, // Taille de l'info-bulle ajustée pour écrans moyens
-              },
-            },
+            series: [{ label: { fontSize: 20 } }],
+            tooltip: { textStyle: { fontSize: 20 } },
           },
         },
-      ]
+      ],
     };
-
   }
- onChartEvent(event: any, type: string) {
+
+
+  /**
+   * Event handler for echarts chart events. It logs the event type and data in the console
+   * and navigates to the country page when the user clicks on a country in the chart
+   * @param event - The echarts event
+   * @param type - The type of event
+   */
+  onChartEvent(event: any, type: string) {
+    console.log('chart event:', type, event);
+    
     this.router.navigate(['country/' + event.data.id]);
   }
+
+ 
+  @HostListener('window:resize', ['$event.target.innerWidth'])
+  /**
+   * Handler for window resize events.
+   * This function is called when the window is resized.
+   * It reloads the page to apply the new size of the chart.
+   * @param width The new width of the window
+   */
+  onResize(width: number) {
+     console.log(width);
+     window.location.reload();
   }
 
+
+  /**
+   * Cleanup just before Angular destroys the directive/component. Called just before
+   * the directive/component is destroyed.
+   * Unsubscribe from observables to prevent memory leaks.
+   * @see https://angular.io/api/core/OnDestroy
+   */
+ngOnDestroy(): void {
+  // Désabonnement de l'abonnement pour éviter les fuites de mémoire
+  console.log('Composant détruit');
+  }
+}
 
 
 
