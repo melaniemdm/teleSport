@@ -31,11 +31,8 @@ export class CountryComponent {
    //console.log(this.countryId);
 
     if (this.countryId) {
-      const idExistSubscription =  this.olympicService.isIdExist(this.countryId).subscribe((isExist: boolean) => {
-        if (isExist) {
-         
-          this.router.navigate(['country/'+this.countryId]);
-        } else {
+      const idExistSubscription =this.olympicService.isIdMissing(this.countryId).subscribe((isMissing: boolean) => {
+        if (isMissing) {
           this.router.navigate(['not-found']);
         }
       });
