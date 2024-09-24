@@ -1,29 +1,61 @@
-# OlympicGamesStarter
+# OlympicGamesApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
+This project is an Angular application developed to display data about the Olympic Games. It uses a modular architecture with well-defined components, pages, and business logic.
 
-Don't forget to install your node_modules before starting (`npm install`).
+## Prerequisites
 
-## Development server
+- Node.js (recommended version 14 or higher)
+- Angular CLI (version 18.0.3)
+- NPM (or Yarn) for package management
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Installation
 
-## Build
+Clone the project, then install the dependencies by running:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm install
+```
 
-## Where to start
+## Start the Development Server
 
-As you can see, an architecture has already been defined for the project. It is just a suggestion, you can choose to use your own. The predefined architecture includes (in addition to the default angular architecture) the following:
+To start the application in development mode, run:
 
-- `components` folder: contains every reusable components
-- `pages` folder: contains components used for routing
-- `core` folder: contains the business logic (`services` and `models` folders)
+```bash
+ng serve
+```
 
-I suggest you to start by understanding this starter code. Pay an extra attention to the `app-routing.module.ts` and the `olympic.service.ts`.
+Then access the application in your browser at http://localhost:4200/. The application will automatically reload when you change any source files.
 
-Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
+## Build the Project
+To build the project for production, run:
 
-You're now ready to implement the requested features.
+```bash
+ng build
+```
 
-Good luck!
+The build artifacts will be stored in the dist/ directory. Use this version for deploying the application.
+
+## Project Architecture
+
+The application is organized using a modular architecture to facilitate maintenance and reuse of components:
+
+- components: Contains all reusable components of the application.
+- pages: Contains components used for routing and main views.
+- core: Contains business logic, including services for API calls and data models (services and models).
+
+## Implemented Features
+
+- Display Olympic Games: The application fetches and displays data about the Olympic Games from an external source.
+- Medals Visualization: Displays a chart of medals by country.
+- Simplified Navigation: Clear navigation between different pages using Angular Router.
+- Use of Services: Data management via Angular services to separate business logic from the user interface.
+- TypeScript Interfaces: Replaced any types with specific interfaces to improve code robustness and readability.
+
+## Key Code Sections
+
+- app-routing.module.ts: Manages navigation between the application's pages.
+- olympic.service.ts: Service responsible for fetching and managing Olympic data. It is a key point to understand how data is handled.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
