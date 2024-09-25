@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, ECElementEvent } from 'echarts';
 import { NgxEchartsDirective, provideEcharts } from 'ngx-echarts';
 import { CountryMedals } from 'src/app/core/models/CountryMedals';
 
@@ -26,8 +26,7 @@ export class AllMedalsGraphComponent {
 
   ngOnInit(): void {
     this.chartOption = {
-      responsive: true,
-      // Configuration de la couleur de la série
+        
       color: ['#793d52', '#89a1db', '#9780a1', '#bfe0f1', '#b8cbe7', '#956065'],
       tooltip: {
         trigger: 'item',
@@ -48,7 +47,11 @@ export class AllMedalsGraphComponent {
           radius: ['0%', '70%'],
           name: 'Médaille par Pays',
           type: 'pie',
-          data: this.countriesMedals,
+          data: this.countriesMedals.map((countryMedals: CountryMedals) => ({
+            name: countryMedals.name,
+            value: countryMedals.value,
+            id: countryMedals.id, 
+          })),
           label: {
             show: true,
             fontSize: 20,
@@ -77,40 +80,29 @@ export class AllMedalsGraphComponent {
   }
 
 
-  /**
-   * Event handler for echarts chart events. It logs the event type and data in the console
-   * and navigates to the country page when the user clicks on a country in the chart
-   * @param event - The echarts event
-   * @param type - The type of event
-   */
-  onChartEvent(event: any, type: string) {
+ 
+  onChartEvent(event: ECElementEvent, type: string): void {
     console.log('chart event:', type, event);
-    
-    this.router.navigate(['country/' + event.data.id]);
+    // Vérifiez si event.data est un objet avec un id
+    if (event.data && typeof event.data === 'object' && 'id' in event.data) {
+      const data = event.data as { id: string }; 
+      this.router.navigate(['country/' + data.id]);
+    } else {
+      console.warn("L'événement ne contient pas d'ID valide", event);
+    }
   }
 
  
   @HostListener('window:resize', ['$event.target.innerWidth'])
-  /**
-   * Handler for window resize events.
-   * This function is called when the window is resized.
-   * It reloads the page to apply the new size of the chart.
-   * @param width The new width of the window
-   */
-  onResize(width: number) {
-     console.log(width);
-     window.location.reload();
-  }
+ 
+  onResize(width: number): void {
+    console.log('New width:', width);
+      }
 
+  
 
-  /**
-   * Cleanup just before Angular destroys the directive/component. Called just before
-   * the directive/component is destroyed.
-   * Unsubscribe from observables to prevent memory leaks.
-   * @see https://angular.io/api/core/OnDestroy
-   */
 ngOnDestroy(): void {
-  // Désabonnement de l'abonnement pour éviter les fuites de mémoire
+ 
   console.log('Composant détruit');
   }
 }

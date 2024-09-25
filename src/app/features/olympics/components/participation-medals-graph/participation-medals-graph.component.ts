@@ -18,23 +18,23 @@ export class ParticipationMedalsGraphComponent {
   chartOption: EChartsOption = {}
   @Input({ required: true }) participations: Participation[] = [];
   ngOnInit (): void{
-    //console.log(this.participations.map(participation=> participation.year));
-    //console.log(this.participations.map(particpation=>particpation.medalsCount));
-    this.chartOption= {
-      xAxis: {
-        type: 'category',
-        data: this.participations.map(participation=> participation.year),
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          data: this.participations.map(particpation=>particpation.medalsCount),
-          type: 'line',
+    if (this.participations.length) { // Vérification des données pour éviter des erreurs
+      this.chartOption = {
+        xAxis: {
+          type: 'category',
+          data: this.participations.map((participation: Participation) => participation.year),
         },
-      ],
-    };
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            data: this.participations.map((participation: Participation) => participation.medalsCount),
+            type: 'line',
+          },
+        ],
+      };
+    }
   }
 
 }

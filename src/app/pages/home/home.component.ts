@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {  combineLatest, map, Subscription} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { CountryMedals } from 'src/app/core/models/CountryMedals';
 import { Olympics } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -8,46 +8,34 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-
 })
-
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   public olympics: Olympics[] | null = null;
-  public totalUniqueOlympics: number = 0;
-  public totalCountries: number = 0;
-  public countriesMedals: CountryMedals[] = []
-
-  private subscription: Subscription = new Subscription();
+  public totalUniqueOlympics = 0;
+  public totalCountries = 0;
+  public countriesMedals: CountryMedals[] = [];
+  private subscription = new Subscription(); // Gestion des abonnements
 
   constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
-    // Use `combineLatest` to manage multiple observables simultaneously
-    const combinedSubscription = combineLatest([
-      this.olympicService.getTotalUniqueOlympics(),
-      this.olympicService.getTotalCountries(),
-      this.olympicService.getAllCountryMedals(),
-    ])
-    .pipe(
-      map(([ totalUniqueOlympics, totalCountries, countriesMedals]) => {
-        return {  totalUniqueOlympics, totalCountries, countriesMedals }; // Return both results
+    this.subscription.add(
+      combineLatest([
+        this.olympicService.getTotalUniqueOlympics(),
+        this.olympicService.getTotalCountries(),
+        this.olympicService.getAllCountryMedals(),
+      ]).subscribe({
+        next: ([totalUniqueOlympics, totalCountries, countriesMedals]) => {
+          this.totalUniqueOlympics = totalUniqueOlympics;
+          this.totalCountries = totalCountries;
+          this.countriesMedals = countriesMedals;
+        },
+        error: (error) => console.error('Error fetching data:', error),
       })
-    )
-    .subscribe(({  totalUniqueOlympics, totalCountries, countriesMedals }) => {
-      this.countriesMedals = countriesMedals;
-      this.totalUniqueOlympics = totalUniqueOlympics;
-      this.totalCountries = totalCountries;
-
-      //console.log('tableau des countries:', this.countriesMedals)
-     // console.log('Total unique Olympics:', this.totalUniqueOlympics);
-     // console.log('Total countries:', this.totalCountries);
-    });
-    this.subscription.add(combinedSubscription);
+    );
   }
+
   ngOnDestroy(): void {
-    // Désabonnement de l'abonnement pour éviter les fuites de mémoire
-    this.subscription.unsubscribe();
-    console.log('UNSUBSCRIPTION DONE ');
-    
+    this.subscription.unsubscribe(); // Désabonnement pour éviter les fuites de mémoire
   }
 }
