@@ -13,7 +13,7 @@ import { CountryMedals } from '../models/CountryMedals';
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<Olympics[] | null>(null);
+  private olympics$ = new BehaviorSubject<Olympics[] >([]);
   public Country: Country[] = [];
 
   constructor(private http: HttpClient) { }
@@ -22,12 +22,12 @@ export class OlympicService {
       return this.getOlympics();
   }
 
-  private getOlympics(): Observable<Olympics[] | null> {
+  private getOlympics(): Observable<Olympics[] > {
     return this.http.get<Olympics[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
       catchError((error) => {
         console.error(error);
-        this.olympics$.next(null);
+        this.olympics$.next([]);
         return throwError(() => error); // Renvoie une erreur Observable proprement
       })
     );
@@ -38,12 +38,8 @@ export class OlympicService {
 
   getTotalUniqueOlympics(): Observable<number> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] | null) => {
-        if (!olympics) {
-          return 0; // Return 0 if no data
-        }
-
-        // Extract all years from all participations
+      map((olympics: Olympics[]) => {
+               // Extract all years from all participations
         const allYears = olympics.flatMap((country: Olympics) =>
           country.participations.map((participation: Participation) => participation.year)
         );
@@ -60,14 +56,7 @@ export class OlympicService {
   /** Returns the number of countries (or 0 if the list is not loaded), with each object in olympics representing a country. */
   getTotalCountries(): Observable<number> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] | null) => {
-        if (!olympics) {
-          return 0;
-        }
-
-        // Return the number of countries (each object in olympics represents a country)
-        return olympics.length;
-      })
+      map((olympics: Olympics[] ) => olympics.length)
     );
   }
 
@@ -75,11 +64,8 @@ export class OlympicService {
 
   getOlympicsPerCountry(): Observable<Country[]> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] | null) => {
-        if (!olympics) {
-          return [];
-        }
-
+      map((olympics: Olympics[] ) => {
+       
         // Transform data into Country
         return olympics.map((country: Olympics) => {
           const totalMedalsCount = country.participations.reduce(
@@ -105,10 +91,7 @@ export class OlympicService {
   /** Returns data for a specific country filtered by its ID. */
   getOlympicsForCountry(countryId: string): Observable<Country | undefined> {
     return this.getOlympicsPerCountry().pipe(
-      map((countries: Country[]) => {
-        // Filter to find country data corresponding to the ID
-        return countries.find(country => country.id.toString() === countryId);
-      })
+      map((countries: Country[]) => countries.find(country => country.id.toString() === countryId))
     );
   }
 
@@ -144,11 +127,8 @@ export class OlympicService {
    */
   getAllCountryMedals(): Observable<CountryMedals[]> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] | null) => {
-        if (!olympics) {
-          return []; 
-        }
-  
+      map((olympics: Olympics[] ) => {
+         
         // Transform the data to get the country name and medal total
         return olympics.map((country: Olympics) => {
           const totalMedals = country.participations.reduce(
