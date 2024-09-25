@@ -20,6 +20,6 @@
     [valueindicator]="selectedCountry?.totalAthleteCount?.toString() || '0'">
   </app-display-indicator>
 </div>
-<app-participation-medals-graph [participations]="participations"></app-participation-medals-graph>
+<app-participation-medals-graph [participations]="participations" *ngIf="participations.length>0"></app-participation-medals-graph>
 
 <button class="backButton" title="Back to home" routerLink="/">Home</button>
