@@ -61,7 +61,7 @@ export class OlympicService {
     return this.olympics$.pipe(
       map((olympics: Olympics[]) => {
         // Extract all years from all participations
-        const allYears = olympics.flatMap((country: Olympics) =>
+        const allYears: number[] = olympics.flatMap((country: Olympics) =>
           country.participations.map((participation: Participation) => participation.year)
         );
         // Use a Set to have unique years
@@ -88,10 +88,10 @@ export class OlympicService {
 
         // Transform data into Country
         return olympics.map((country: Olympics) => {
-          const totalMedalsCount = country.participations.reduce(
+          const totalMedalsCount: number = country.participations.reduce(
             (sum, participation) => sum + participation.medalsCount, 0
           );
-          const totalAthleteCount = country.participations.reduce(
+          const totalAthleteCount: number = country.participations.reduce(
             (sum, participation) => sum + participation.athleteCount, 0
           );
 
@@ -127,10 +127,8 @@ export class OlympicService {
 
     return this.getOlympicsPerCountry().pipe(
       map((countries: Country[]) => {
-        console.log(countries)
         if (countries.length > 0) {
           const isIdExist: boolean = countries.some(country => country.id.toString() === countryId); // corrected to boolean
-          console.log(isIdExist);
           return !isIdExist;
         }
         return false;
@@ -147,13 +145,11 @@ export class OlympicService {
   getAllCountryMedals(): Observable<CountryMedals[]> {
     return this.olympics$.pipe(
       map((olympics: Olympics[]) => {
-
         return olympics.map((country: Olympics) => {
-          const totalMedals = country.participations.reduce(
+          const totalMedals: number = country.participations.reduce(
             (sum, participation) => sum + participation.medalsCount,
             0
           );
-
           return {
             id: country.id,
             name: country.country,
