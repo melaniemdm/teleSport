@@ -13,37 +13,57 @@ import { CountryMedals } from '../models/CountryMedals';
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<Olympics[] >([]);
+  private olympics$ = new BehaviorSubject<Olympics[]>([]);
   public Country: Country[] = [];
 
   constructor(private http: HttpClient) { }
 
+
+  /**
+   * Retrieves the initial data for the application by calling getOlympics and
+   * updating the observable olympics$ with the received data.
+   * @returns Observable of the retrieved data
+   */
   loadInitialData() {
-      return this.getOlympics();
+    return this.getOlympics();
   }
 
-  private getOlympics(): Observable<Olympics[] > {
+  
+  /**
+   * Loads the olympics data from the json file and updates the
+   * olympics$ observable with the received data.
+   * If an error occurs, it logs the error and sets the observable to an empty array.
+   * @returns Observable of the retrieved data
+   */
+  private getOlympics(): Observable<Olympics[]> {
     return this.http.get<Olympics[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
       catchError((error) => {
         console.error(error);
         this.olympics$.next([]);
-        return throwError(() => error); // Renvoie une erreur Observable proprement
+        return throwError(() => error); 
       })
     );
   }
 
 
-  /** Returns the number of unique Olympiads (or 0 if the list of countries is empty) using a Set for years of participation. */
 
+
+
+  /**
+   * Returns an observable of the number of unique olympic years.
+   * It takes the array of Olympics from the olympics$ observable and
+   * extracts all years from all participations.
+   * It then uses a Set to have unique years and returns the number of unique years.
+   * @returns Observable of the number of unique olympic years
+   */
   getTotalUniqueOlympics(): Observable<number> {
     return this.olympics$.pipe(
       map((olympics: Olympics[]) => {
-               // Extract all years from all participations
+        // Extract all years from all participations
         const allYears = olympics.flatMap((country: Olympics) =>
           country.participations.map((participation: Participation) => participation.year)
         );
-        //console.log(allYears);
         // Use a Set to have unique years
         const uniqueYears = new Set(allYears);
 
@@ -56,7 +76,7 @@ export class OlympicService {
   /** Returns the number of countries (or 0 if the list is not loaded), with each object in olympics representing a country. */
   getTotalCountries(): Observable<number> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] ) => olympics.length)
+      map((olympics: Olympics[]) => olympics.length)
     );
   }
 
@@ -64,8 +84,8 @@ export class OlympicService {
 
   getOlympicsPerCountry(): Observable<Country[]> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] ) => {
-       
+      map((olympics: Olympics[]) => {
+
         // Transform data into Country
         return olympics.map((country: Olympics) => {
           const totalMedalsCount = country.participations.reduce(
@@ -77,11 +97,11 @@ export class OlympicService {
 
           return {
             id: country.id,
-            country: country.country, 
-            totalEntries: country.participations.length, 
-            totalMedalsCount: totalMedalsCount, 
-            totalAthleteCount: totalAthleteCount, 
-            participations : country.participations
+            country: country.country,
+            totalEntries: country.participations.length,
+            totalMedalsCount: totalMedalsCount,
+            totalAthleteCount: totalAthleteCount,
+            participations: country.participations
           };
         });
       })
@@ -104,12 +124,11 @@ export class OlympicService {
    */
 
   isIdMissing(countryId: string): Observable<boolean> {
-    
+
     return this.getOlympicsPerCountry().pipe(
       map((countries: Country[]) => {
         console.log(countries)
         if (countries.length > 0) {
-          // Filter to find country data corresponding to the ID. Return false if found
           const isIdExist: boolean = countries.some(country => country.id.toString() === countryId); // corrected to boolean
           console.log(isIdExist);
           return !isIdExist;
@@ -127,19 +146,18 @@ export class OlympicService {
    */
   getAllCountryMedals(): Observable<CountryMedals[]> {
     return this.olympics$.pipe(
-      map((olympics: Olympics[] ) => {
-         
-        // Transform the data to get the country name and medal total
+      map((olympics: Olympics[]) => {
+
         return olympics.map((country: Olympics) => {
           const totalMedals = country.participations.reduce(
             (sum, participation) => sum + participation.medalsCount,
             0
           );
-  
+
           return {
             id: country.id,
-            name: country.country, 
-            value: totalMedals,    
+            name: country.country,
+            value: totalMedals,
           };
         });
       })

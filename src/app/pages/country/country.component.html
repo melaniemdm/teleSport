@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 
-<!-- <p>{{ countryId }}</p> -->
-
-<a routerLink="/" name="home"><app-display-title [title]="selectedCountry?.country || 'No country selected'"></app-display-title></a>
+<a routerLink="/" name="home"><app-display-title
+    [title]="selectedCountry?.country || 'No country selected'"></app-display-title></a>
 
 <div class="value-country">
-  <app-display-indicator
-    title="Number of entries"
-    [valueindicator]="selectedCountry?.totalEntries?.toString() || '0'">
+  <app-display-indicator title="Number of entries" [valueindicator]="selectedCountry?.totalEntries?.toString() || '0'">
   </app-display-indicator>
 
-  <app-display-indicator
-    title="Total number of medals"
+  <app-display-indicator title="Total number of medals"
     [valueindicator]="selectedCountry?.totalMedalsCount?.toString() || '0'">
   </app-display-indicator>
 
-  <app-display-indicator
-    title="Total number of athletes"
+  <app-display-indicator title="Total number of athletes"
     [valueindicator]="selectedCountry?.totalAthleteCount?.toString() || '0'">
   </app-display-indicator>
 </div>
-<app-participation-medals-graph [participations]="participations" *ngIf="participations.length>0"></app-participation-medals-graph>
+<app-participation-medals-graph [participations]="participations"
+  *ngIf="participations.length>0"></app-participation-medals-graph>
 
 <button class="backButton" title="Back to home" routerLink="/">Home</button>

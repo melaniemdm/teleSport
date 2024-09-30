@@ -17,8 +17,18 @@ import { Participation } from 'src/app/core/models/Participation';
 export class ParticipationMedalsGraphComponent {
   chartOption: EChartsOption = {}
   @Input({ required: true }) participations: Participation[] = [];
-  ngOnInit (): void{
-    if (this.participations.length) { // Vérification des données pour éviter des erreurs
+
+
+
+  /**
+   * Initialization of the component.
+   * When the component is initialized, it builds the chart configuration
+   * from the participations data provided as input.
+   * It verifies that the data is not empty to avoid errors.
+   */
+
+  ngOnInit(): void {
+    if (this.participations.length) {
       this.chartOption = {
         xAxis: {
           type: 'category',
