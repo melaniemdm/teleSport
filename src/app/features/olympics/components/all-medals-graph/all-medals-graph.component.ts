@@ -17,7 +17,7 @@ import { CountryMedals } from 'src/app/core/models/CountryMedals';
   ]
 })
 export class AllMedalsGraphComponent {
-  @Input({ required: true }) countriesMedals: CountryMedals[] = [];
+  @Input({ required: true }) allmedals: CountryMedals[] = [];
 
   chartOption: EChartsOption = {}
 
@@ -52,7 +52,7 @@ export class AllMedalsGraphComponent {
           radius: ['0%', '70%'],
           name: 'Médaille par Pays',
           type: 'pie',
-          data: this.countriesMedals.map((countryMedals: CountryMedals) => ({
+          data: this.allmedals.map((countryMedals: CountryMedals) => ({
             name: countryMedals.name,
             value: countryMedals.value,
             id: countryMedals.id,
