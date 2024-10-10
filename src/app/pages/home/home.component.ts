@@ -14,9 +14,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public totalUniqueOlympics = 0;
   public totalCountries = 0;
   public countriesMedals: CountryMedals[] = [];
-  private subscription = new Subscription(); // Gestion des abonnements
+  private readonly subscription = new Subscription(); // Gestion des abonnements
 
-  constructor(private olympicService: OlympicService) { }
+  constructor(private readonly olympicService: OlympicService) { }
 
 
   /**
@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         error: (error) => console.error('Error fetching data:', error),
       })
     );
+     
   }
 
 
@@ -68,5 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    console.log('UNSUBSCRIPTION DONE');
+    console.log('COMPONENT DESTROYED');
   }
 }

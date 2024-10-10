@@ -21,7 +21,7 @@ export class AllMedalsGraphComponent {
 
   chartOption: EChartsOption = {}
 
-  constructor(private router: Router) { }
+  constructor(private readonly router: Router) { }
 
   /**
    * This function is called once when the component is initialized.
@@ -93,8 +93,6 @@ export class AllMedalsGraphComponent {
    * @param type The type of event that occurred.
    */
   onChartEvent(event: ECElementEvent, type: string): void {
-    console.log('chart event:', type, event);
-
     if (event.data && typeof event.data === 'object' && 'id' in event.data) {
       const data = event.data as { id: string };
       this.router.navigate(['country/' + data.id]);
@@ -125,8 +123,7 @@ export class AllMedalsGraphComponent {
    * It is mainly used for any custom cleanup that needs to take place when the instance is destroyed.
    */
   ngOnDestroy(): void {
-
-    console.log('Composant détruit');
+    console.log('COMPONENT DESTROYED');
   }
 }
 

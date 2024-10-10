@@ -22,9 +22,9 @@ export class CountryComponent {
   public countryId: string | null = null;
   public selectedCountry: Country | null = null;
   public participations: Participation[] = [];
-  private subscriptions: Subscription = new Subscription();
+  private readonly subscriptions: Subscription = new Subscription();
 
-  constructor(private route: ActivatedRoute, private olympicService: OlympicService, private router: Router) { }
+  constructor(private readonly route: ActivatedRoute, private readonly olympicService: OlympicService, private readonly router: Router) { }
 
   /**
    * OnInit lifecycle hook. Called once when the component is initialized.
@@ -41,8 +41,8 @@ export class CountryComponent {
     //  Get country ID from URL
     this.countryId = this.route.snapshot.paramMap.get('countryId');
     if (this.countryId) {
-      const idExistSubscription = this.olympicService.isIdMissing(this.countryId).subscribe((isMissing: boolean) => {
-        if (isMissing) {
+      const idExistSubscription = this.olympicService.isIdExist(this.countryId).subscribe((isExist: boolean) => {
+        if (!isExist) {
           this.router.navigate(['not-found']);
         }
       });
@@ -65,6 +65,7 @@ export class CountryComponent {
    */
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    console.log('UNSUBSCRIPTION DONE ');
+    console.log('UNSUBSCRIPTION DONE');
+    console.log('COMPONENT DESTROYED');
   }
 }

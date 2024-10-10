@@ -12,11 +12,11 @@ import { CountryMedals } from '../models/CountryMedals';
   providedIn: 'root',
 })
 export class OlympicService {
-  private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<Olympics[]>([]);
+  private readonly olympicUrl = './assets/mock/olympic.json';
+  private readonly olympics$ = new BehaviorSubject<Olympics[]>([]);
   public Country: Country[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
 
   /**
@@ -28,7 +28,7 @@ export class OlympicService {
     return this.getOlympics();
   }
 
-  
+
   /**
    * Loads the olympics data from the json file and updates the
    * olympics$ observable with the received data.
@@ -41,7 +41,7 @@ export class OlympicService {
       catchError((error) => {
         console.error(error);
         this.olympics$.next([]);
-        return throwError(() => error); 
+        return throwError(() => error);
       })
     );
   }
@@ -57,6 +57,7 @@ export class OlympicService {
    * It then uses a Set to have unique years and returns the number of unique years.
    * @returns Observable of the number of unique olympic years
    */
+
   getTotalUniqueOlympics(): Observable<number> {
     return this.olympics$.pipe(
       map((olympics: Olympics[]) => {
@@ -94,8 +95,7 @@ export class OlympicService {
           const totalAthleteCount: number = country.participations.reduce(
             (sum, participation) => sum + participation.athleteCount, 0
           );
-
-          return {
+          const newCountry: Country = {
             id: country.id,
             country: country.country,
             totalEntries: country.participations.length,
@@ -103,6 +103,7 @@ export class OlympicService {
             totalAthleteCount: totalAthleteCount,
             participations: country.participations
           };
+          return newCountry
         });
       })
     );
@@ -123,15 +124,15 @@ export class OlympicService {
    * @returns An observable that emits a boolean indicating whether the country exists
    */
 
-  isIdMissing(countryId: string): Observable<boolean> {
+  isIdExist(countryId: string): Observable<boolean> {
 
     return this.getOlympicsPerCountry().pipe(
       map((countries: Country[]) => {
         if (countries.length > 0) {
-          const isIdExist: boolean = countries.some(country => country.id.toString() === countryId); // corrected to boolean
-          return !isIdExist;
+          const isIdExist: boolean = countries.some(country => country.id.toString() === countryId);
+          return isIdExist;
         }
-        return false;
+        return true;
       })
     );
   }
