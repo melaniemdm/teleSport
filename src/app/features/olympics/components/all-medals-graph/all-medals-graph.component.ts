@@ -101,22 +101,6 @@ export class AllMedalsGraphComponent {
     }
   }
 
-
-  @HostListener('window:resize', ['$event.target.innerWidth'])
-
-
-  /**
-   * Handles window resize event.
-   * @param width The new width of the window in pixels.
-   */
-
-  onResize(width: number): void {
-    console.log('New width:', width);
-  }
-
-
-
-
   /**
    * Called when the component is destroyed.
    * This lifecycle hook is called right before the directive, pipe or service instance is destroyed.
