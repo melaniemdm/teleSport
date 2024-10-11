@@ -12,7 +12,7 @@ import { provideEcharts } from 'ngx-echarts';
   ]
 })
 export class AppComponent implements OnInit {
-  constructor(private olympicService: OlympicService) {}
+  constructor(private readonly olympicService: OlympicService) {}
 
   ngOnInit(): void {
     this.olympicService.loadInitialData().pipe(take(1)).subscribe();
